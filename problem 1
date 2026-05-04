@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int maxCyclicSubstringSum(string s) {
+    int n = s.size();
+    string doubled = s + s;
+
+    vector<int> freq(26, 0);
+    int left = 0, currentSum = 0, maxSum = 0;
+
+    for (int right = 0; right < 2 * n; right++) {
+        int idx = doubled[right] - 'a';
+
+        while (freq[idx] > 0) {
+            freq[doubled[left] - 'a']--;
+            currentSum -= (doubled[left] - 'a' + 1);
+            left++;
+        }
+
+        freq[idx]++;
+        currentSum += (idx + 1);
+
+      
+        if (right - left + 1 > n) {
+            freq[doubled[left] - 'a']--;
+            currentSum -= (doubled[left] - 'a' + 1);
+            left++;
+        }
+
+        maxSum = max(maxSum, currentSum);
+    }
+
+    return maxSum;
+}
+
+int main() {
+    string s;
+    cin >> s;
+
+    cout << maxCyclicSubstringSum(s) << endl;
+
+    return 0;
+}
